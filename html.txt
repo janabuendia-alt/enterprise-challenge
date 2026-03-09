@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <title>FMEA Generator</title>
+    <style>
+        body { font-family: sans-serif; margin: 40px; line-height: 1.6; }
+        label { font-weight: bold; }
+        input, textarea { margin-bottom: 15px; }
+        h1 { color: #1F4E78; }
+        h2 { border-bottom: 2px solid #1F4E78; padding-bottom: 5px; color: #333; }
+        button { 
+            background-color: #1F4E78; 
+            color: white; 
+            padding: 10px 20px; 
+            border: none; 
+            cursor: pointer; 
+            font-size: 16px; 
+        }
+        button:hover { background-color: #2e75b6; }
+    </style>
+</head>
+<body>
+
+<h1>Automatic FMEA Analysis Tool</h1>
+
+<form method="POST">
+
+    <h2>Project Information</h2>
+
+    <label>Project:</label><br>
+    <input type="text" name="project" size="60" required placeholder="Ex: Drone Alpha"><br><br>
+
+    <label>User Name:</label><br>
+    <input type="text" name="user_name" size="60" required><br><br>
+
+    <label>Version:</label><br>
+    <input type="text" name="version" size="60" value="1.0"><br><br>
+
+    <label>Object Name:</label><br>
+    <input type="text" name="object_name" size="60" required placeholder="Ex: Quadcopter Model X"><br><br>
+
+    <h2>Technical Inputs</h2>
+
+    <label>List of Parts (separated by commas):</label><br>
+    <input type="text" name="piezas" size="80" required placeholder="Motor, Battery, GPS, Propeller"><br><br>
+
+    <label>Specifications (Power, Temperature, Consumption, etc.):</label><br>
+    <textarea name="specs" rows="3" cols="80"></textarea><br><br>
+
+    <label>Product Requirements:</label><br>
+    <textarea name="requirements" rows="3" cols="80"></textarea><br><br>
+
+    <label>Reliability (lifetime, failure rate, etc.):</label><br>
+    <textarea name="reliability" rows="2" cols="80"></textarea><br><br>
+
+    <label>Safety (burn risk, electrical faults, etc.):</label><br>
+    <textarea name="safety" rows="2" cols="80"></textarea><br><br>
+
+    <label>Maintainability / Serviceability:</label><br>
+    <textarea name="maintainability" rows="2" cols="80"></textarea><br><br>
+
+    <label>Usability / Performance:</label><br>
+    <textarea name="usability" rows="2" cols="80"></textarea><br><br>
+
+    <button type="submit">Generate FMEA & Download Excel</button>
+
+</form>
+
+</body>
+</html>
