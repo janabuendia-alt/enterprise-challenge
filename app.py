@@ -1,34 +1,52 @@
-
 import streamlit as st
-# Aquestes línies connecten els teus fitxers separats
-from fmea_engine import generar_dades_fmea 
-from excel_formatter import formatar_excel
-
-from flask import Flask, render_template, request, send_file
+import os
+# IMPORTEM ELS TEUS FITXERS (Vigila que els noms coincideixin!)
 from fmea_engine import generate_fmea
 from excel_formatter import create_fmea_excel
-import os
 
-app = Flask(__name__)
+st.set_page_config(page_title="FMEA Generator", layout="centered")
 
-@app.route("/", methods=["GET", "POST"])
-def index():
-    if request.method == "POST":
-        form_data = request.form.to_dict()
+st.title("🛠️ FMEA Analysis Tool")
+st.write("Eina professional per a la generació de FMEA amb IA.")
 
-        # Generar análisis FMEA con IA
-        fmea_data = generate_fmea(form_data)
+# FORMULARI DISSENYAT PER A STREAMLIT
+with st.form("meu_formulari"):
+    project = st.text_input("Nom del Projecte", "Projecte Alpha")
+    user = st.text_input("Enginyer/a", "JJana")
+    version = st.text_input("Versió", "1.0")
+    object_name = st.text_input("Objecte a analitzar", "Motor")
+    peces = st.text_area("Peces (separades per comes)", "Rotor, Estator, Rodaments")
+    
+    submit = st.form_submit_button("Generar FMEA i Excel")
 
-        # Crear Excel con la nueva capçalera (passem form_data sencer)
-        file_path = create_fmea_excel(fmea_data, form_data)
-
-        return send_file(file_path, as_attachment=True)
-
-    return render_template("index.html")
-
-import os
-
-if __name__ == "__main__":
-    # Això agafa el port que el servidor ens doni automàticament
-    port = int(os.environ.get("PORT", 5001))
-    app.run(host='0.0.0.0', port=port)
+if submit:
+    # Preparem les dades com les espera el teu fmea_engine
+    form_data = {
+        "project": project,
+        "user": user,
+        "version": version,
+        "object": object_name,
+        "peces": peces
+    }
+    
+    with st.spinner("La IA està treballant... espera uns segons."):
+        try:
+            # 1. CRIDEM EL TEU MOTOR DE IA
+            fmea_data = generate_fmea(form_data)
+            
+            # 2. CRIDEM EL TEU FORMATADOR D'EXCEL
+            # Nota: El teu codi guarda el fitxer i retorna la ruta (path)
+            file_path = create_fmea_excel(fmea_data, form_data)
+            
+            # 3. BOTÓ DE DESCÀRREGA
+            with open(file_path, "rb") as f:
+                st.download_button(
+                    label="📥 Descarregar l'Excel FMEA",
+                    data=f,
+                    file_name=f"FMEA_{project}.xlsx",
+                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                )
+            st.success("Fet! Ja pots descarregar el fitxer.")
+            
+        except Exception as e:
+            st.error(f"S'ha produït un error: {e}")
