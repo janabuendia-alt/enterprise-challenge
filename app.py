@@ -1,3 +1,9 @@
+
+import streamlit as st
+# Aquestes línies connecten els teus fitxers separats
+from fmea_engine import generar_dades_fmea 
+from excel_formatter import formatar_excel
+
 from flask import Flask, render_template, request, send_file
 from fmea_engine import generate_fmea
 from excel_formatter import create_fmea_excel
@@ -20,8 +26,9 @@ def index():
 
     return render_template("index.html")
 
+import os
+
 if __name__ == "__main__":
-    # El servidor públic ens assignarà un port automàticament
+    # Això agafa el port que el servidor ens doni automàticament
     port = int(os.environ.get("PORT", 5001))
-    # '0.0.0.0' permet que la web sigui visible a tot internet
     app.run(host='0.0.0.0', port=port)
